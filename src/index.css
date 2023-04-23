@@ -48,7 +48,10 @@ code {
   /* border: none; */
   /* border-bottom: 2px solid #0e4174; */
 }
-
+strong{
+  font-size:  20px;
+  color:#1976d2;
+}
 #free-solo-2-demo-label {
   color: #0e4174;
 }
