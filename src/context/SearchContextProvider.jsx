@@ -11,7 +11,7 @@ export default function SearchContextProvider(props) {
   const getData = async (query) => {
     resetSearch();
     try {
-      const res = await axios.get(`http://localhost:8080/search/${query}`);
+      const res = await axios.get(`http://localhost:8080/search?q=${query}`);
       setBlogs(res.data);
       setSuccess(true);
     } catch (err) {

@@ -107,7 +107,7 @@ const Results = () => {
       <h5>About {numberOfResults} results (0.48 seconds)</h5>
       <RuseltList Quarys={paginatedResults} />
       <Pagination
-        count={Math.ceil(paginatedResults.length / resultsPerPage)}
+        count={Math.ceil(data.length / resultsPerPage)}
         page={currentPage}
         onChange={handlePageChange}
         id="Pagination"
