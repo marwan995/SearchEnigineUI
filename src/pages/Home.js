@@ -5,7 +5,7 @@ const Home = () => {
   const [speed, setSpeed] = useState(10);
 
   const startSearchAnimation = () => {
-    setSpeed(90);
+    setSpeed(180);
   };
 
   const stopSearchAnimation = () => {

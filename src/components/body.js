@@ -8,7 +8,7 @@ function HighlightWords({ sentence, words }) {
     Bodywords=Bodywords.replaceAll(e,`<strong>${e}</strong>`)
   });
   
-  return <p dangerouslySetInnerHTML={{ __html: Bodywords.slice(0,520)+"..." }}></p>;
+  return <p dangerouslySetInnerHTML={{ __html: Bodywords.slice(0,600)+"..." }}></p>;
 }
 
 export default HighlightWords;

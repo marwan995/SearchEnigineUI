@@ -98,7 +98,7 @@ strong{
   overflow: hidden;
 }
 
-.Search div {
+.Container .Search div {
   width: 100%;
 }
 
@@ -124,7 +124,7 @@ strong{
   height: 50px;
 }
 .NavBar div {
-  width: 100%;
+  width: 85%;
 }
 .quary {
   background-color: #22272e;
@@ -173,9 +173,6 @@ a:hover {
   color: white !important;
 }
 form {
-  width: 50%;
-}
-.Container form {
   width: 100%;
 }
 .Results h5 {
