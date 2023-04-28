@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import Earth from "../components/Earth";
 import Search from "../components/Search";
 const Home = () => {
-  const [speed, setSpeed] = useState(10);
+  const [speed, setSpeed] = useState(5);
 
   const startSearchAnimation = () => {
-    setSpeed(180);
+    setSpeed(80);
   };
 
   const stopSearchAnimation = () => {
-    setSpeed(10);
+    setSpeed(5);
   };
 
   return (

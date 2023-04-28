@@ -16,6 +16,7 @@ export default function SearchContextProvider(props) {
       setStartTime(new Date());
       const res = await axios.get(`http://localhost:8080/search?q=${query}`);
       setBlogs(res.data);
+      localStorage.setItem("lastQuery", JSON.stringify(res.data));
       setSuccess(true);
       setendTime(new Date());
     } catch (err) {

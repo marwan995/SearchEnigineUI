@@ -1,17 +1,22 @@
 import NavBar from "../components/NavBar";
 import RuseltList from "../components/RuseltList";
 import Pagination from "@mui/material/Pagination";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SearchContext } from "../context/SearchContextProvider";
 
 const Results = () => {
   const {data,startTime,endTime} = useContext(SearchContext);
   const resultsPerPage = 10; // Change this to set number of results to display per page
   const [currentPage, setCurrentPage] = useState(1);
+  const [flitteredData,setflitteredData]=useState([]);
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
-  let flitteredData= Array.from(data).filter(e=> e.body.length>e.key.length)
+  useEffect(()=>{
+    setCurrentPage(1);
+    data.length==0?setflitteredData(JSON.parse(localStorage.getItem("lastQuery"))):setflitteredData(Array.from(data).filter(e=> e.body.length>e.key.length));
+  },[data])
+
   const startIndex = (currentPage - 1) * resultsPerPage;
   const endIndex = currentPage * resultsPerPage;
   const paginatedResults = flitteredData.slice(startIndex, endIndex+1);
