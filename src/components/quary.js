@@ -4,11 +4,10 @@ const Quary = ({ title, url, des,words }) => {
   return (
     <div className="quary">
       <Link to={`${url}`}>
-        <h2> {title} </h2>
+        <h2> {title||"No title is found"} </h2>
       </Link>
       <h4>{url}</h4>
       <HighlightWords sentence={des} words={words} />
-      {/* <p>{des}</p> */}
     </div>
   );
 };

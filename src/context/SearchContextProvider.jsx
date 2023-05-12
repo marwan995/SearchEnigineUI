@@ -7,18 +7,19 @@ export default function SearchContextProvider(props) {
   const [data, setBlogs] = useState([]);
   const [isPending, setPending] = useState(true);
   const [isSuccess, setSuccess] = useState(false);
-  const [startTime,setStartTime]=useState(0);
-  const [endTime,setendTime]=useState(0);
+  const [Time,setTime]=useState(0);
+  const [contextQuery, setContextQuery] = useState("")
 
   const getData = async (query) => {
     resetSearch();
     try {
-      setStartTime(new Date());
+      query=query.replace(/"/g, "'");
+      setContextQuery(query);
       const res = await axios.get(`http://localhost:8080/search?q=${query}`);
-      setBlogs(res.data);
       localStorage.setItem("lastQuery", JSON.stringify(res.data));
+      setTime(res.data.pop().time.toFixed(2))
+      setBlogs(res.data);
       setSuccess(true);
-      setendTime(new Date());
     } catch (err) {
       setSuccess(false);
     }
@@ -30,7 +31,7 @@ export default function SearchContextProvider(props) {
     setSuccess(false);
   };
     return (
-    <SearchContext.Provider value={{startTime,endTime ,getData, data, isPending, isSuccess, resetSearch }}>
+    <SearchContext.Provider value={{Time,getData, data, isPending, isSuccess, resetSearch,contextQuery,setPending }}>
       {props.children}
     </SearchContext.Provider>
   );

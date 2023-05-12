@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 
 const Search = ({ startSearchAnimation, stopSearchAnimation }) => {
   const navigate = useNavigate();
-  const { getData, data, isPending, isSuccess, resetSearch } =
+  const { getData, data, isPending, isSuccess, resetSearch ,setPending} =
     useContext(SearchContext);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -23,6 +23,7 @@ const Search = ({ startSearchAnimation, stopSearchAnimation }) => {
     if (!isPending) {
       stopSearchAnimation();
       if (isSuccess) {
+        setPending(false);
         navigate("/results");
       } else {
         console.log("Error");

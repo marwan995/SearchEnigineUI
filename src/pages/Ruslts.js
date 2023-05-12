@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { SearchContext } from "../context/SearchContextProvider";
 
 const Results = () => {
-  const {data,startTime,endTime} = useContext(SearchContext);
+  const {data, Time,contextQuery} = useContext(SearchContext);
   const resultsPerPage = 10; // Change this to set number of results to display per page
   const [currentPage, setCurrentPage] = useState(1);
   const [flitteredData,setflitteredData]=useState([]);
@@ -25,10 +25,10 @@ const Results = () => {
   return (
     <div className="Results">
       <NavBar />
-      <h5>About {numberOfResults} results ({(endTime-startTime)/1000} seconds)</h5>
-      <RuseltList Quarys={paginatedResults} />
+      <h5>About {numberOfResults} results ({Time||"loading"} seconds)</h5>
+      <RuseltList Quarys={paginatedResults} contextQuery={contextQuery}/>
       <Pagination
-        count={Math.floor(numberOfResults / resultsPerPage)+1}
+        count={(numberOfResults % resultsPerPage)===0?numberOfResults / resultsPerPage:Math.floor(numberOfResults / resultsPerPage)+1}
         page={currentPage}
         onChange={handlePageChange}
         id="Pagination"
