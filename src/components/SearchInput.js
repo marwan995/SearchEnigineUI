@@ -1,11 +1,14 @@
-import * as React from "react";
+import React, {useRef} from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-export default function SearchInput({ setSearchQuery }) {
+import InputAdornment from "@mui/material/InputAdornment";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+export default function SearchInput({ setSearchQuery, handleImageChange }) {
   const [textFieldValue, setTextFieldValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const inputRef = useRef(null);
 
   const handleTextFieldChange = (event) => {
     setTextFieldValue(event.target.value);
@@ -15,35 +18,44 @@ export default function SearchInput({ setSearchQuery }) {
     setTextFieldValue(value);
     setSearchQuery(value);
   };
-  useEffect(()=>{
-   axios.get("http://localhost:8080/Query").then((res)=>{
-    setSearchResults(res.data);
-   })
-  },[])
+  useEffect(() => {
+    axios.get("http://localhost:8080/Query").then((res) => {
+      setSearchResults(res.data);
+    });
+  }, []);
   return (
-      <Autocomplete
-        className="inputContainer"
-        sx={{ borderColor: "white" }}
-        freeSolo
-        onChange={handleAutocompleteChange}
-        id="free-solo-2-demo"
-        disableClearable
-        options={searchResults}
-        renderInput={(params) => (
-          <TextField
-            className="input"
-            onChange={handleTextFieldChange}
-            value={textFieldValue}
-            {...params}
-            label="Search...."
-            InputProps={{
-              ...params.InputProps,
-              type: "search",
-            }}
-            required
-          />
-        )}
-      />
+    <Autocomplete
+      className="inputContainer"
+      sx={{ borderColor: "white" }}
+      freeSolo
+      onChange={handleAutocompleteChange}
+      id="free-solo-2-demo"
+      disableClearable
+      options={searchResults}
+      renderInput={(params) => (
+        <TextField
+          className="input"
+          onChange={handleTextFieldChange}
+          value={textFieldValue}
+          {...params}
+          label="Search...."
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <InputAdornment position="end">
+                <PhotoCameraIcon
+                  style={{ fill: "#ffffff", cursor: "pointer", marginBottom: 40, marginLeft: "auto", marginRight: 10 }}
+                  onClick={() => inputRef.current.click()}
+                />
+                <input type="file" id="image-upload" ref={inputRef} onChange={handleImageChange} style={{display: "none"}}/>
+              </InputAdornment>
+            ),
+            type: "search",
+          }}
+          required
+        />
+      )}
+    />
   );
 }
 
@@ -130,4 +142,3 @@ export default function SearchInput({ setSearchQuery }) {
 //     des: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores ipsum delectus ea officia nostrum ab fugiat quam iure temporibus reprehenderit illum veritatis, eius sed, debitis quis ex? Aperiam, odit placeat!",
 //   },
 // ];
-

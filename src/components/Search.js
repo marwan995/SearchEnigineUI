@@ -2,12 +2,15 @@ import React, { useState, useEffect, useContext } from "react";
 import SearchInput from "./SearchInput";
 import { SearchContext } from "../context/SearchContextProvider";
 import { useNavigate } from "react-router";
+import("@tensorflow/tfjs");
+const MobileNet = require("@tensorflow-models/mobilenet");
 
 const Search = ({ startSearchAnimation, stopSearchAnimation }) => {
   const navigate = useNavigate();
-  const { getData, data, isPending, isSuccess, resetSearch ,setPending} =
+  const { getData, data, isPending, isSuccess, resetSearch, setPending } =
     useContext(SearchContext);
   const [searchQuery, setSearchQuery] = useState("");
+  const [loadMobileNetModel, setMobileNetModel] = useState(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -18,6 +21,37 @@ const Search = ({ startSearchAnimation, stopSearchAnimation }) => {
   useEffect(() => {
     resetSearch();
   }, []);
+
+  useEffect(() => {
+    setMobileNetModel(async () => await MobileNet.load());
+  }, []);
+
+  const loadMobilenetImage = async (src) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.addEventListener("load", () => resolve(img));
+      img.addEventListener("error", (err) => reject(err));
+      img.src = src;
+    });
+  };
+
+  const handleImageChange = async (e) => {
+    let query = "";
+    try {
+      let image = await loadMobilenetImage(
+        URL.createObjectURL(e.target.files[0])
+      );
+      const predictions = await (await loadMobileNetModel).classify(image);
+      for (let prediction of predictions) 
+        if (prediction.probability > 0.05)
+          query += prediction.className + " ";
+      query = query.replace(/,/g, "");
+      startSearchAnimation();
+      getData(query);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     if (!isPending) {
@@ -47,7 +81,7 @@ const Search = ({ startSearchAnimation, stopSearchAnimation }) => {
           information to make it easily searchable.
         </h3>
         <form onSubmit={handleSubmit}>
-          <SearchInput setSearchQuery={setSearchQuery} />
+          <SearchInput setSearchQuery={setSearchQuery} handleImageChange={handleImageChange}/>
         </form>
       </div>
     </div>
