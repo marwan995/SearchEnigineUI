@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import SearchInput from "./SearchInput";
 import { SearchContext } from "../context/SearchContextProvider";
 import { useNavigate } from "react-router";
-import("@tensorflow/tfjs");
+import "@tensorflow/tfjs";
 const MobileNet = require("@tensorflow-models/mobilenet");
 
 const Search = ({ startSearchAnimation, stopSearchAnimation }) => {
@@ -17,6 +17,11 @@ const Search = ({ startSearchAnimation, stopSearchAnimation }) => {
     startSearchAnimation();
     getData(searchQuery);
   };
+
+  const search = (query) => {
+    startSearchAnimation();
+    getData(query);
+  }
 
   useEffect(() => {
     resetSearch();
@@ -42,9 +47,8 @@ const Search = ({ startSearchAnimation, stopSearchAnimation }) => {
         URL.createObjectURL(e.target.files[0])
       );
       const predictions = await (await loadMobileNetModel).classify(image);
-      for (let prediction of predictions) 
-        if (prediction.probability > 0.05)
-          query += prediction.className + " ";
+      for (let prediction of predictions)
+        if (prediction.probability > 0.05) query += prediction.className + " ";
       query = query.replace(/,/g, "");
       startSearchAnimation();
       getData(query);
@@ -81,7 +85,11 @@ const Search = ({ startSearchAnimation, stopSearchAnimation }) => {
           information to make it easily searchable.
         </h3>
         <form onSubmit={handleSubmit}>
-          <SearchInput setSearchQuery={setSearchQuery} handleImageChange={handleImageChange}/>
+          <SearchInput
+            setSearchQuery={setSearchQuery}
+            handleImageChange={handleImageChange}
+            search={search}
+          />
         </form>
       </div>
     </div>
